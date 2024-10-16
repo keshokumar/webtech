@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="eventApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="app.js"></script>
+</head>
+<body ng-controller="EventController">
+
+    <div class="container">
+        <h1>Event Management</h1>
+        <form ng-submit="addEvent()">
+            <label for="eventName">Event Name:</label>
+            <input type="text" id="eventName" ng-model="newEvent.name" required>
+
+            <label for="eventDate">Event Date:</label>
+            <input type="date" id="eventDate" ng-model="newEvent.date" required>
+
+            <label for="eventLocation">Location:</label>
+            <input type="text" id="eventLocation" ng-model="newEvent.location" required>
+
+            <label for="eventPrice">Ticket Price:</label>
+            <input type="number" id="eventPrice" ng-model="newEvent.price" required>
+
+            <button type="submit">Add Event</button>
+        </form>
+
+        <h2>Events List</h2>
+
+        <label for="currencySelect">Select Currency:</label>
+        <select id="currencySelect" ng-model="currency">
+            <option value="USD">USD</option>
+            <option value="EUR">EUR</option>
+            <option value="INR">INR</option>
+        </select>
+
+        <input type="text" placeholder="Search Events" ng-model="searchQuery" />
+
+        <ul>
+            <li ng-repeat="event in events | filter:searchQuery">
+                {{ event.name }} - {{ event.date | eventDateFilter }} - {{ event.location }} - {{ event.price | currencyFilter:currency }}
+                <button ng-click="updateEvent(event)">Edit</button>
+                <button ng-click="deleteEvent(event._id)">Delete</button>
+            </li>
+        </ul>
+
+        <div ng-if="editingEvent">
+            <h3>Edit Event</h3>
+            <form ng-submit="updateExistingEvent(editingEvent)">
+                <label for="editEventName">Event Name:</label>
+                <input type="text" id="editEventName" ng-model="editingEvent.name" required>
+
+                <label for="editEventDate">Event Date:</label>
+                <input type="date" id="editEventDate" ng-model="editingEvent.date" required>
+
+                <label for="editEventLocation">Location:</label>
+                <input type="text" id="editEventLocation" ng-model="editingEvent.location" required>
+
+                <label for="editEventPrice">Ticket Price:</label>
+                <input type="number" id="editEventPrice" ng-model="editingEvent.price" required>
+
+                <button type="submit">Update Event</button>
+                <button type="button" ng-click="cancelEdit()">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
